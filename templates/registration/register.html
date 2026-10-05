@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block title %}Create account • CampusHub{% endblock %}
+{% block content %}
+<div class="auth-wrap">
+  <div class="auth-card">
+    <div class="eyebrow">Get started</div>
+    <h1>Create your account</h1>
+    <p class="text-secondary">Book facilities and manage your campus resources.</p>
+    <form method="post">{% csrf_token %}
+      {{ form.as_p }}
+      <button class="btn btn-dark w-100 py-2">Create account</button>
+    </form>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block title %}{{ facility.name }} • CampusHub{% endblock %}
+{% block content %}
+<div class="container py-5">
+  <a href="{% url 'facilities' %}" class="text-secondary">← All facilities</a>
+  <div class="row g-5 mt-1">
+    <div class="col-lg-7">
+      <div class="detail-image" {% if facility.image_url %}style="background-image:url('{{ facility.image_url }}')"{% endif %}>
+        <span>{{ facility.get_facility_type_display }}</span>
+      </div>
+    </div>
+    <div class="col-lg-5">
+      <div class="eyebrow">{{ facility.code }}</div>
+      <h1>{{ facility.name }}</h1>
+      <p class="lead text-secondary">{{ facility.description }}</p>
+      <div class="detail-facts"><div><strong>{{ facility.capacity }}</strong><span>Capacity</span></div><div><strong>{{ facility.location }}</strong><span>Location</span></div></div>
+      <h6 class="mt-4">Amenities</h6><p>{{ facility.amenities|default:"Standard campus amenities" }}</p>
+      <a href="{% url 'create_booking' %}" class="btn btn-dark btn-lg w-100 mt-3">Request this facility</a>
+    </div>
+  </div>
+  <div class="mt-5"><h3>Upcoming approved bookings</h3>
+    <div class="table-responsive mt-3"><table class="table align-middle">
+      <thead><tr><th>Date</th><th>Time</th><th>Status</th></tr></thead>
+      <tbody>{% for b in upcoming %}<tr><td>{{ b.booking_date }}</td><td>{{ b.start_time }} – {{ b.end_time }}</td><td><span class="badge bg-success-subtle text-success">Approved</span></td></tr>{% empty %}<tr><td colspan="3" class="text-secondary">No approved bookings listed.</td></tr>{% endfor %}</tbody>
+    </table></div>
+  </div>
+</div>
+{% endblock %}

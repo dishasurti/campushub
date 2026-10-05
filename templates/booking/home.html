@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+{% block title %}CampusHub • Facility Booking{% endblock %}
+{% block content %}
+<section class="hero">
+  <div class="container py-5">
+    <div class="row align-items-center g-5 py-lg-5">
+      <div class="col-lg-7">
+        <div class="eyebrow">INTEGRATED CAMPUS OPERATIONS</div>
+        <h1>Book spaces.<br><span>Manage resources.</span></h1>
+        <p class="lead text-secondary mt-4">One platform for classrooms, labs, auditoriums, sports facilities and shared equipment.</p>
+        <div class="d-flex flex-wrap gap-2 mt-4">
+          <a class="btn btn-dark btn-lg px-4" href="{% url 'facilities' %}">Explore facilities</a>
+          {% if user.is_authenticated %}<a class="btn btn-outline-dark btn-lg px-4" href="{% url 'create_booking' %}">Make a booking</a>{% else %}<a class="btn btn-outline-dark btn-lg px-4" href="{% url 'register' %}">Create account</a>{% endif %}
+        </div>
+      </div>
+      <div class="col-lg-5">
+        <div class="hero-panel">
+          <div class="panel-top"><span class="live-dot"></span> Booking system</div>
+          <div class="calendar-mini">
+            <div class="cal-title">Campus availability</div>
+            <div class="cal-grid">
+              <span>M</span><span>T</span><span>W</span><span>T</span><span>F</span>
+              <b>12</b><b>13</b><b class="active">14</b><b>15</b><b>16</b>
+            </div>
+          </div>
+          <div class="booking-preview"><span>●</span><div><strong>Innovation Auditorium</strong><small>10:00 — 12:00 · Approved</small></div></div>
+          <div class="booking-preview muted"><span>●</span><div><strong>Smart Classroom 204</strong><small>14:00 — 16:00 · Available</small></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="container py-5">
+  <div class="row g-3">
+    <div class="col-md-4"><div class="stat-card"><div class="stat-number">{{ facility_count }}</div><div>Active facilities</div></div></div>
+    <div class="col-md-4"><div class="stat-card"><div class="stat-number">{{ resource_count }}</div><div>Resource categories</div></div></div>
+    <div class="col-md-4"><div class="stat-card"><div class="stat-number">{{ booking_count }}</div><div>Approved bookings</div></div></div>
+  </div>
+</section>
+
+<section class="container py-4 pb-5">
+  <div class="d-flex justify-content-between align-items-end mb-4">
+    <div><div class="eyebrow">FACILITIES</div><h2>Find the right space</h2></div>
+    <a href="{% url 'facilities' %}" class="text-dark fw-semibold">View all →</a>
+  </div>
+  <div class="row g-4">
+    {% for facility in facilities %}
+    <div class="col-md-6 col-lg-4">
+      <a class="facility-card" href="{% url 'facility_detail' facility.pk %}">
+        <div class="facility-image" {% if facility.image_url %}style="background-image:url('{{ facility.image_url }}')"{% endif %}><span>{{ facility.get_facility_type_display }}</span></div>
+        <div class="p-4"><h5>{{ facility.name }}</h5><p class="text-secondary small mb-2">{{ facility.location }}</p><div class="small fw-semibold">Up to {{ facility.capacity }} people</div></div>
+      </a>
+    </div>
+    {% empty %}<p>No facilities yet. Run <code>python manage.py seed_demo</code>.</p>{% endfor %}
+  </div>
+</section>
+{% endblock %}

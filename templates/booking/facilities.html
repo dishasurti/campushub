@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block title %}Facilities • CampusHub{% endblock %}
+{% block content %}
+<div class="container py-5">
+  <div class="eyebrow">FACILITY DIRECTORY</div><h1 class="page-title">Campus spaces</h1>
+  <form class="row g-2 my-4">
+    <div class="col-md-6"><input class="form-control form-control-lg" name="q" value="{{ q }}" placeholder="Search by name, code or location"></div>
+    <div class="col-md-3"><select class="form-select form-select-lg" name="type"><option value="">All types</option>{% for value,label in types %}<option value="{{ value }}" {% if selected_type == value %}selected{% endif %}>{{ label }}</option>{% endfor %}</select></div>
+    <div class="col-md-3"><button class="btn btn-dark btn-lg w-100">Search</button></div>
+  </form>
+  <div class="row g-4">
+    {% for facility in facilities %}
+    <div class="col-md-6 col-lg-4">
+      <a class="facility-card" href="{% url 'facility_detail' facility.pk %}">
+        <div class="facility-image" {% if facility.image_url %}style="background-image:url('{{ facility.image_url }}')"{% endif %}><span>{{ facility.get_facility_type_display }}</span></div>
+        <div class="p-4"><div class="small text-secondary">{{ facility.code }}</div><h5>{{ facility.name }}</h5><p class="text-secondary">{{ facility.location }}</p><div class="d-flex justify-content-between small"><span>Capacity</span><strong>{{ facility.capacity }}</strong></div></div>
+      </a>
+    </div>
+    {% empty %}<div class="empty">No matching facilities found.</div>{% endfor %}
+  </div>
+</div>
+{% endblock %}

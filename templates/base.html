@@ -1,0 +1,54 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}CampusHub{% endblock %}</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@600;700;800&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="{% static 'css/app.css' %}">
+</head>
+<body>
+<nav class="navbar navbar-expand-lg bg-white border-bottom sticky-top">
+  <div class="container py-2">
+    <a class="navbar-brand fw-bold" href="{% url 'home' %}"><span class="brand-mark">C</span> CampusHub</a>
+    <button class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#nav"><span class="navbar-toggler-icon"></span></button>
+    <div class="collapse navbar-collapse" id="nav">
+      <ul class="navbar-nav ms-auto align-items-lg-center gap-lg-2">
+        <li class="nav-item"><a class="nav-link" href="{% url 'facilities' %}">Facilities</a></li>
+        {% if user.is_authenticated %}
+          <li class="nav-item"><a class="nav-link" href="{% url 'dashboard' %}">My bookings</a></li>
+          <li class="nav-item"><a class="btn btn-dark btn-sm px-3" href="{% url 'create_booking' %}">New booking</a></li>
+          {% if user.is_staff %}<li class="nav-item"><a class="nav-link" href="{% url 'admin_dashboard' %}">Admin</a></li>{% endif %}
+          <li class="nav-item">
+            <form method="post" action="{% url 'logout' %}" class="d-inline">{% csrf_token %}<button class="nav-link btn btn-link">Logout</button></form>
+          </li>
+        {% else %}
+          <li class="nav-item"><a class="nav-link" href="{% url 'login' %}">Login</a></li>
+          <li class="nav-item"><a class="btn btn-dark btn-sm px-3" href="{% url 'register' %}">Create account</a></li>
+        {% endif %}
+      </ul>
+    </div>
+  </div>
+</nav>
+
+{% if messages %}
+<div class="container pt-3">
+  {% for message in messages %}<div class="alert alert-{{ message.tags|default:'info' }} shadow-sm">{{ message }}</div>{% endfor %}
+</div>
+{% endif %}
+
+<main>{% block content %}{% endblock %}</main>
+
+<footer class="border-top mt-5 py-5 bg-white">
+  <div class="container d-flex justify-content-between flex-wrap gap-3">
+    <div><strong>CampusHub</strong><div class="text-secondary small">Integrated campus facility & resource management</div></div>
+    <div class="text-secondary small">Built with Python & Django</div>
+  </div>
+</footer>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
